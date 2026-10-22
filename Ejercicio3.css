@@ -116,7 +116,7 @@ button {
   text-align: left;
   color: #1c2f40;
   background: var(--placa);
-  border: 0;
+  border: 1px black solid;
   border-radius: 10px;
   cursor: pointer;
   box-shadow: 0 3px 0 var(--sombra-placa);
@@ -186,7 +186,7 @@ button:focus-visible {
 }
 
 #contenido:not(:has(ul))::before {
-  content: "Elige una opción para ver su información.";
+  content: "Elige una opción.";
   font-size: 0.95rem;
   color: var(--texto-suave);
 }
