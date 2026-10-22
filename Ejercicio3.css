@@ -1,0 +1,256 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap");
+
+/* Idea: la página es el panel frontal de un switch de rack.
+   Los botones son puertos con LED y la lista es la pantalla de estado. */
+
+:root {
+  --pared: #c9d3d8;
+  --chasis: #22384a;
+  --pantalla: #142331;
+  --placa: #eef2f1;
+  --sombra-placa: #a9b7be;
+  --led-off: #b3bfc5;
+  --led-on: #19b9a6;
+  --led-brillo: rgba(25, 185, 166, 0.55);
+  --ambar: #f0a81f;
+  --texto-claro: #e6efec;
+  --texto-suave: #8fa6b5;
+  --tornillo: radial-gradient(circle, #9db0be 0 2.5px, #5e7686 3px 4px, transparent 4.5px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--pared);
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+}
+
+/* El body es el chasis */
+body {
+  width: min(92%, 30rem);
+  margin: clamp(1rem, 8vh, 5rem) auto;
+  padding: 2.5rem 1.75rem 1.75rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.875rem;
+  color: var(--texto-claro);
+  border-radius: 22px;
+  background:
+    var(--tornillo) left 10px top 10px / 10px 10px no-repeat,
+    var(--tornillo) right 10px top 10px / 10px 10px no-repeat,
+    var(--tornillo) left 10px bottom 10px / 10px 10px no-repeat,
+    var(--tornillo) right 10px bottom 10px / 10px 10px no-repeat,
+    var(--chasis);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.18),
+    0 24px 40px -18px rgba(20, 35, 49, 0.55);
+}
+
+/* Cabecera: foto + nombre + rol */
+#principal {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1.25rem;
+  align-items: center;
+  padding-bottom: 0.5rem;
+}
+
+#principal img {
+  grid-row: 1 / 3;
+  width: 6.5rem;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--placa);
+  background: var(--pantalla);
+  box-shadow:
+    0 0 0 5px var(--chasis),
+    0 0 0 7px rgba(238, 242, 241, 0.25);
+}
+
+#principal h1 {
+  margin: 0;
+  align-self: end;
+  font-size: clamp(2.25rem, 9vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: #f3f6f4;
+}
+
+#principal h2 {
+  margin: 0.45rem 0 0;
+  align-self: start;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #a9dcd3;
+}
+
+/* LED de "enlace activo" junto al rol */
+#principal h2::before {
+  content: "";
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--led-on);
+  box-shadow: 0 0 8px 1px var(--led-brillo);
+}
+
+/* Botones = puertos con LED */
+button {
+  position: relative;
+  padding: 0.95rem 1rem 0.95rem 2.6rem;
+  font: inherit;
+  font-size: 0.98rem;
+  font-weight: 600;
+  text-align: left;
+  color: #1c2f40;
+  background: var(--placa);
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--sombra-placa);
+  transition: transform 0.08s, box-shadow 0.08s, background-color 0.15s;
+}
+
+button::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-top: -0.35rem;
+  border-radius: 50%;
+  background: var(--led-off);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.15s, box-shadow 0.15s;
+}
+
+@media (hover: hover) {
+  button:hover {
+    background: #fff;
+  }
+
+  button:hover::before {
+    background: var(--ambar);
+    box-shadow: 0 0 8px 1px rgba(240, 168, 31, 0.6);
+  }
+}
+
+button:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--sombra-placa);
+}
+
+/* LED encendido: botón enfocado (tras el clic) o con la clase .activo */
+button:focus::before,
+button.activo::before {
+  background: var(--led-on);
+  box-shadow: 0 0 10px 2px var(--led-brillo);
+}
+
+button:focus-visible {
+  outline: 3px solid var(--ambar);
+  outline-offset: 3px;
+}
+
+/* Pantalla de estado */
+#contenido {
+  grid-column: 1 / -1;
+  min-height: 11rem;
+  margin-top: 0.25rem;
+  padding: 1.1rem;
+  background: var(--pantalla);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.45),
+    0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Estado vacío (antes de pulsar nada) */
+#contenido:not(:has(ul)) {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+#contenido:not(:has(ul))::before {
+  content: "Elige una opción para ver su información.";
+  font-size: 0.95rem;
+  color: var(--texto-suave);
+}
+
+#contenido ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.6rem;
+}
+
+#contenido li {
+  position: relative;
+  padding: 0.8rem 1rem 0.8rem 2.4rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  animation: entra 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+#contenido li:nth-child(2) { animation-delay: 0.07s; }
+#contenido li:nth-child(3) { animation-delay: 0.14s; }
+#contenido li:nth-child(4) { animation-delay: 0.21s; }
+
+#contenido li::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-top: -0.275rem;
+  border-radius: 50%;
+  background: var(--led-on);
+  box-shadow: 0 0 6px var(--led-brillo);
+}
+
+@keyframes entra {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+
+/* Móvil pequeño */
+@media (max-width: 26rem) {
+  body {
+    grid-template-columns: 1fr;
+  }
+
+  #principal img {
+    width: 5.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #contenido li {
+    animation: none;
+  }
+
+  button,
+  button::before {
+    transition: none;
+  }
+}
