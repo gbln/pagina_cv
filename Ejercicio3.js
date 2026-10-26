@@ -43,7 +43,7 @@ cont.addEventListener("click", function(){
     nuevoElementoLi1.innerText = "Remote work"
     nuevoElementoUl.appendChild(nuevoElementoLi1)
 
-    nuevoElementoLi2.innerText = "Me quiero ir"
+    nuevoElementoLi2.innerText = "Seguro médico"
     nuevoElementoUl.appendChild(nuevoElementoLi2)
 
     document.getElementById("contenido").appendChild(nuevoElementoUl)
